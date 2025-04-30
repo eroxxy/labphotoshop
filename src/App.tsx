@@ -327,128 +327,132 @@ function App() {
   return (
     <div className="container">
       <div className="app">
-        <div className="menu-panel">
-          <div className="menu-btns">
-            <Button className="upload" type="primary" onClick={ () => openModal(
-                "Загрузить изображение",
-                <Tabs defaultActiveKey="1" items={ tabsItemsOnFunc(uploadImageToCanvas) } />
-            )}>
-              Загрузить изображение
-            </Button>
-            <Button className="curves" type="primary" onClick={ () => {
-              setImageScale(100);
-              openModal(
-                  "Коррекция градиента",
-                  <CurvesModal
-                      imageRef={ canvasRef }
-                      onGammaCorrectionChange={ (data) => changeLoadedImage(data) }
-                      closeModal={closeModal}
-                  />
-              )
-            }}>
-              Кривые
-            </Button>
-            <Button className="filtration" type="primary" onClick={ () => {
-              setImageScale(100);
-              openModal(
-                  "Фильтрация",
-                  <FilterModal
-                      imageRef={ canvasRef }
-                      onFilterChange={ (data) => changeLoadedImage(data) }
-                      closeModal={closeModal}
-                  />
-              )
-            }}>
-              Фильтры
-            </Button>
-          </div>
-          <div className="tools">
-            <Button className="download" type="primary" onClick={ downloadImage }>
-              Сохранить
-            </Button>
-            <Button className="change-size" type="primary" onClick={ () => openModal(
-                "Изменение размера",
-                <ChangeSizeModal
-                    width={ loadedImage.imageOriginalWidth }
-                    height={ loadedImage.imageOriginalHeight }
-                    onChangeSizeSubmit={ (width, height) => resizeImage(width, height) }
-                    closeModal={closeModal}
-                />
-            )}>
-              Изменить размер
-            </Button>
-            <IconButton
-                active={ currentTool === 0 }
-                component={ HandSvg }
-                hint="Инструмент для передвижения картинки"
-                onIconButtonClick={ () => onCurrentToolChange(0) }
+    <div className="menu-panel">
+      <div className="menu-btns">
+        <Button className="change-size" type="primary" onClick={ () => openModal(
+            "Изменение размера",
+            <ChangeSizeModal
+                width={ loadedImage.imageOriginalWidth }
+                height={ loadedImage.imageOriginalHeight }
+                onChangeSizeSubmit={ (width, height) => resizeImage(width, height) }
+                closeModal={closeModal}
             />
-            <IconButton
-                active={ currentTool === 1 }
-                component={ PipetteSvg }
-                hint={`Пипетка для извлечения цвета из изображения
-            Выбор первого цвета: ЛКМ
-            Выбор второго цвета: Ctrl + ЛКМ
-          `}
-                onIconButtonClick={ () => onCurrentToolChange(1) }
-            />
-          </div>
-        </div>
-        <div className="work-panel">
-          { currentTool === 0
-            ?
-            <div
-              ref={ imgViewRef }
-              className="img-view"
-              onMouseDown={ onImgViewMouseDown }
-              onMouseMove={ onImgViewMouseMove }
-              onMouseUp={ onImgViewMouseUp }
-            >
-              <canvas
-                ref={ canvasRef }
-                className='canvas'
-                onMouseMove={ pixelInfoChange }
-                onClick={ colorChange }
+        )}>
+          Изменить размер
+        </Button>
+        
+        <Button className="download" type="primary" onClick={ downloadImage }>
+          Сохранить
+        </Button>
+        
+        <Button className="upload" type="primary" onClick={ () => openModal(
+            "Загрузить изображение",
+            <Tabs defaultActiveKey="1" items={ tabsItemsOnFunc(uploadImageToCanvas) } />
+        )}>
+          Загрузить изображение
+        </Button>
+        
+        <Button className="filtration" type="primary" onClick={ () => {
+          setImageScale(100);
+          openModal(
+              "Фильтрация",
+              <FilterModal
+                  imageRef={ canvasRef }
+                  onFilterChange={ (data) => changeLoadedImage(data) }
+                  closeModal={closeModal}
               />
-            </div>
-            :
-            <div
-              ref={ imgViewRef }
-              className="img-view"
-            >
-              <canvas
-                ref={ canvasRef }
-                className='canvas'
-                onMouseMove={ pixelInfoChange }
-                onClick={ colorChange }
+          )
+        }}>
+          Фильтры
+        </Button>
+        
+        <Button className="curves" type="primary" onClick={ () => {
+          setImageScale(100);
+          openModal(
+              "Коррекция градиента",
+              <CurvesModal
+                  imageRef={ canvasRef }
+                  onGammaCorrectionChange={ (data) => changeLoadedImage(data) }
+                  closeModal={closeModal}
               />
-              <SidePanel
-                  color1={ color1 }
-                  color2={ color2 }
-                  currentTool={ currentTool }/>
-            </div>
-          }
-          <Footer
-            loadedImage={ loadedImage }
-            pixelInfo={ pixelInfo }
-            color1={ color1 }
-            color2={ color2 }
-            scale={ scale }
-            currentTool={ currentTool }
-            onCurrentToolChange={ onCurrentToolChange }
-            onSliderChange={ onSliderChange }
+          )
+        }}>
+          Кривые
+        </Button>
+      </div>
+      <div className="tools">
+        <IconButton
+            active={ currentTool === 0 }
+            component={ HandSvg }
+            hint="Инструмент для передвижения картинки"
+            onIconButtonClick={ () => onCurrentToolChange(0) }
+        />
+        <IconButton
+            active={ currentTool === 1 }
+            component={ PipetteSvg }
+            hint={`Пипетка для извлечения цвета из изображения
+        Выбор первого цвета: ЛКМ
+        Выбор второго цвета: Ctrl + ЛКМ
+      `}
+            onIconButtonClick={ () => onCurrentToolChange(1) }
+        />
+      </div>
+    </div>
+    <div className="work-panel">
+      { currentTool === 0
+        ?
+        <div
+          ref={ imgViewRef }
+          className="img-view"
+          onMouseDown={ onImgViewMouseDown }
+          onMouseMove={ onImgViewMouseMove }
+          onMouseUp={ onImgViewMouseUp }
+        >
+          <canvas
+            ref={ canvasRef }
+            className='canvas'
+            onMouseMove={ pixelInfoChange }
+            onClick={ colorChange }
           />
         </div>
-      </div>
-      <Modal
-        title={ modal.title }
-        open={ modal.show }
-        onCancel={closeModal}
-        footer={[]}
-      >
-        { modal.content }
-      </Modal>
+        :
+        <div
+          ref={ imgViewRef }
+          className="img-view"
+        >
+          <canvas
+            ref={ canvasRef }
+            className='canvas'
+            onMouseMove={ pixelInfoChange }
+            onClick={ colorChange }
+          />
+          <SidePanel
+              color1={ color1 }
+              color2={ color2 }
+              currentTool={ currentTool }/>
+        </div>
+      }
+      <Footer
+        loadedImage={ loadedImage }
+        pixelInfo={ pixelInfo }
+        color1={ color1 }
+        color2={ color2 }
+        scale={ scale }
+        currentTool={ currentTool }
+        onCurrentToolChange={ onCurrentToolChange }
+        onSliderChange={ onSliderChange }
+      />
     </div>
+  </div>
+  <Modal
+    title={ modal.title }
+    open={ modal.show }
+    onCancel={closeModal}
+    footer={[]}
+  >
+    { modal.content }
+  </Modal>
+</div>
   )
 }
 
